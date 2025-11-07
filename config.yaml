@@ -1,0 +1,12 @@
+# 核心视觉设置
+vision:
+  default_confidence: 0.8  # 默认的 OpenCV 相似度 (80%)
+  default_timeout: 10      # 默认的 wait_for 超时 (10秒)
+  default_interval: 0.5    # 默认的 wait_for 轮询间隔 (0.5秒)
+
+# 任务开关 (对应 AHK 的 g_settings)
+tasks:
+  # 将我们的测试任务设为 true
+  test_task: true
+ # shop_task: false
+ # arena_task: false
