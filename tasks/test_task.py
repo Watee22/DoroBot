@@ -14,8 +14,8 @@ class TestTask(Task):
         self.confidence = self.config['vision']['default_confidence']
         self.timeout = self.config['vision']['default_timeout']
 
-    def run(self):
-        """任务的执行逻辑"""
+    def run(self) -> bool:
+        """任务的执行逻辑，返回是否成功"""
         print("--- 自动化测试任务已启动 ---")
         print(f"将在 {self.timeout} 秒内查找图标: {self.icon_to_find}")
         print("请确保 '画图' 应用已打开且图标在屏幕上可见...")
@@ -42,9 +42,11 @@ class TestTask(Task):
             self.controls.click_at(coords[0], coords[1])
             
             print("--- 测试任务完成 ---")
+            return True
         else:
             print(f"失败: 在 {self.timeout} 秒内未找到图标。")
             print("请检查:")
             print(" 1. '画图' 应用是否已打开？")
             print(" 2. 'templates/test_icon.png' 截图是否清晰？")
             print("--- 测试任务失败 ---")
+            return False

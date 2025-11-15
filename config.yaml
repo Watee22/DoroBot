@@ -6,7 +6,16 @@ vision:
 
 # 任务开关 (对应 AHK 的 g_settings)
 tasks:
-  # 将我们的测试任务设为 true
   test_task: true
- # shop_task: false
- # arena_task: false
+  login_task: true
+  shop_task: false
+  arena_task: false
+  tower_task: false
+  simulation_task: false
+  interception_task: false
+  event_task: false
+  reward_task: false
+  cleanup_task: false
+
+task_runner:
+  break_on_failure: false

@@ -89,3 +89,29 @@ class Vision:
                 return None
             
             time.sleep(interval)
+
+    def set_controls(self, controls_instance):
+        """设置Controls实例用于点击操作"""
+        self.controls = controls_instance
+        print(f"[Vision] Controls实例已设置: {controls_instance}")
+
+    def wait_and_click(self, template_path, timeout=10, confidence=None, interval=0.5):
+        """
+        等待模板出现并点击它。
+        """
+        coords = self.wait_for_template(template_path, timeout, confidence, interval)
+        if coords:
+            # 使用controls进行点击
+            if hasattr(self, 'controls'):
+                self.controls.click_at(coords[0], coords[1])
+                return True
+            else:
+                print("[Vision] 警告: 未设置Controls实例，无法执行点击操作")
+        return False
+
+    def wait_for_image(self, template_path, timeout=10, confidence=None, interval=0.5):
+        """
+        等待图像出现，不执行点击。
+        """
+        coords = self.wait_for_template(template_path, timeout, confidence, interval)
+        return coords is not None
