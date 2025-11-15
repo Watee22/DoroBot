@@ -1,10 +1,9 @@
-# 核心视觉设置
+meta:
+  version: 1
 vision:
-  default_confidence: 0.8  # 默认的 OpenCV 相似度 (80%)
-  default_timeout: 10      # 默认的 wait_for 超时 (10秒)
-  default_interval: 0.5    # 默认的 wait_for 轮询间隔 (0.5秒)
-
-# 任务开关 (对应 AHK 的 g_settings)
+  default_confidence: 0.8
+  default_timeout: 10
+  default_interval: 0.5
 tasks:
   test_task: true
   login_task: true
@@ -16,6 +15,105 @@ tasks:
   event_task: false
   reward_task: false
   cleanup_task: false
-
+toggles:
+  AutoStartNikke: 0
+  Timedstart: 0
+  ShopCash: 1
+  ShopCashFree: 0
+  ShopCashFreePackage: 0
+  ShopGeneral: 1
+  ShopGeneralFree: 0
+  ShopGeneralDust: 0
+  ShopGeneralPackage: 0
+  ShopArena: 1
+  ShopArenaBookFire: 0
+  ShopArenaBookWater: 0
+  ShopArenaBookWind: 0
+  ShopArenaBookElec: 0
+  ShopArenaBookIron: 0
+  ShopArenaBookBox: 0
+  ShopArenaPackage: 0
+  ShopArenaFurnace: 0
+  ShopRecycling: 1
+  ShopRecyclingGem: 0
+  ShopRecyclingVoucher: 0
+  ShopRecyclingResources: 0
+  ShopRecyclingTeamworkBox: 0
+  ShopRecyclingKitBox: 0
+  ShopRecyclingArms: 0
+  SimulationNormal: 1
+  SimulationOverClock: 0
+  AwardArena: 1
+  ArenaRookie: 0
+  ArenaSpecial: 0
+  ArenaChampion: 0
+  TowerCompany: 1
+  TowerUniversal: 1
+  InterceptionNormal: 1
+  InterceptionAnomaly: 0
+  InterceptionScreenshot: 0
+  InterceptionRedCircle: 0
+  InterceptionExit7: 0
+  InterceptionReminder: 0
+  AwardOutpost: 1
+  AwardOutpostDispatch: 0
+  AwardAdvise: 0
+  AwardAdviseAward: 0
+  AwardAppreciation: 0
+  AwardFriendPoint: 1
+  AwardMail: 1
+  AwardRanking: 0
+  AwardDaily: 1
+  AwardPass: 0
+  AwardFreeRecruit: 0
+  AwardCooperate: 0
+  AwardSoloRaid: 0
+  AutoFill: 0
+  EventSmall: 0
+  EventSmallChallenge: 0
+  EventSmallStory: 0
+  EventSmallMission: 0
+  EventLarge: 0
+  EventLargeSign: 0
+  EventLargeChallenge: 0
+  EventLargeStory: 0
+  EventLargeCooperate: 0
+  EventLargeMinigame: 0
+  EventLargeDaily: 0
+  EventSpecial: 0
+  EventSpecialSign: 0
+  EventSpecialChallenge: 0
+  EventSpecialStory: 0
+  EventSpecialCooperate: 0
+  EventSpecialMinigame: 0
+  EventSpecialDaily: 0
+  ClearRed: 1
+  ClearRedRecycling: 0
+  ClearRedSynchro: 0
+  ClearRedSynchroForce: 0
+  ClearRedLimit: 0
+  ClearRedCube: 0
+  ClearRedNotice: 0
+  ClearRedShop: 0
+  ClearRedWallpaper: 0
+  ClearRedProfile: 0
+  ClearRedBla: 0
+  OpenBlablalink: 0
+  CheckEvent: 0
+  DoroClosing: 0
+  CheckAuto: 0
+  StoryModeAutoChoose: 0
+  StoryModeAutoStar: 0
+  TestModeInitialization: 0
+numeric_settings:
+  StartupPath: ''
+  StartupTime: ''
+  InterceptionBoss: 1
+  InterceptionBossNormal: 1
+  UserLevel: 0
+  UserGroup: Free
+  doroGuiX: 0
+  doroGuiY: 0
+  TestModeValue: 0
 task_runner:
   break_on_failure: false

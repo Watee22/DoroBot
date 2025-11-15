@@ -1,4 +1,3 @@
-import yaml
 import sys
 from core.screen import Screen
 from core.controls import Controls
@@ -14,9 +13,8 @@ from tasks.event_task import EventTask
 from tasks.reward_task import RewardTask
 from tasks.cleanup_task import CleanupTask
 import pyautogui
-# 你将来会在这里导入你真正的任务:
-# from tasks.shop_task import ShopTask
-# from tasks.arena_task import ArenaTask
+from config.manager import ConfigManager
+from config.watch import ConfigWatcher
 
 class DoroBot:
     def __init__(self, config_path='config.yaml'):
@@ -24,18 +22,32 @@ class DoroBot:
         初始化主机器人。
         """
         print("--- DoroBot 正在启动... ---")
-        self.config = self._load_config(config_path)
-        
+        self.config_path = config_path
+        self.config_manager = ConfigManager(config_path)
+        self.config = self.config_manager.data
+        self.config_manager.save()
         # 1. 初始化所有核心组件 (机器人的“四肢”)
         try:
             self.screen = Screen()
             self.controls = Controls()
-            self.vision = Vision(self.screen, self.config['vision']['default_confidence'])
+            default_conf = (
+                self.config.get('vision', {}).get('default_confidence', 0.8)
+            )
+            self.vision = Vision(self.screen, default_conf)
         except Exception as e:
             print(f"初始化核心组件失败: {e}")
             print("机器人无法启动。")
             sys.exit(1)
             
+        # 1.1 配置文件热更新监控
+        try:
+            self._config_watcher = ConfigWatcher(self.config_path, interval=1.0)
+            self._config_watcher.subscribe(self._on_config_file_changed)
+            self._config_watcher.start()
+            print("[Config] 配置热更新已启用")
+        except Exception as e:
+            print(f"[Config] 警告: 启用配置热更新失败: {e}")
+
         # 2. 注册所有可用的任务 (机器人的“大脑”)
         # 我们在这里将 "self" (DoroBot实例) 传递给每个任务
         # 注意：部分任务需要 settings/numeric_settings，本处先以空字典启动，
@@ -54,20 +66,21 @@ class DoroBot:
         }
         print("--- DoroBot 初始化完成 ---")
 
-    def _load_config(self, config_path):
-        """私有方法，用于加载 YAML 配置文件"""
+    def _on_config_file_changed(self):
+        """配置文件变更回调：重新加载并更新运行时组件和任务引用"""
         try:
-            with open(config_path, 'r', encoding='utf-8') as f:
-                config = yaml.safe_load(f)
-                print(f"[Config] 成功加载配置文件: {config_path}")
-                return config
-        except FileNotFoundError:
-            print(f"[Config] 严重错误: 配置文件未找到 {config_path}")
-            sys.exit(1)
+            self.config_manager.load()
+            self.config = self.config_manager.data
+            new_conf = self.config.get('vision', {}).get('default_confidence', 0.8)
+            self.vision.default_confidence = new_conf
+            for task in self.available_tasks.values():
+                try:
+                    task.config = self.config
+                except Exception:
+                    pass
+            print("[Config] 配置已热更新并应用")
         except Exception as e:
-            print(f"[Config] 严重错误: 解析配置文件失败 {config_path}")
-            print(f"错误详情: {e}")
-            sys.exit(1)
+            print(f"[Config] 热更新失败: {e}")
 
     def run(self):
         print("\n--- 开始执行任务循环 ---")
@@ -113,6 +126,11 @@ class DoroBot:
         except Exception as e:
             print(f"\n[DoroBot] 发生未处理的致命错误: {e}")
         finally:
+            try:
+                if hasattr(self, "_config_watcher") and self._config_watcher:
+                    self._config_watcher.stop()
+            except Exception:
+                pass
             print("[DoroBot] 正在关闭...")
 
 # --- Python 脚本的主入口点 ---
